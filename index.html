@@ -1,0 +1,76 @@
+<html>
+<head>
+	<style>
+		body{
+			padding:20px;
+			font-family:arial;
+			color:#808080;
+		}
+		.content{
+			width:980px;
+			margin:auto;
+			text-align:center;
+		}
+	</style>
+</head>
+<body>
+<div class="content">
+	<h3>Simple Postgres Connection Application</h3>
+	<br/>
+	<p>Total Like Count : <span id="counter"></span></p> 
+    
+	<input type="submit" value="+1 to Cisco Shipped" id="btnLike"/>
+    <input type="submit" value="Reset Counter" id="btnReset"/>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.min.js"></script>
+<script>
+	$(document).ready(function() {
+    
+        	$.ajax({
+    url: "http://localhost:8888/data",
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+		$("#counter").html(data.Data.Count);
+    },
+    error: function(request, error) {
+      console.log("Endpoint not working");
+    }
+  });
+        
+	$("#btnLike").click(function(){  
+            var i = parseInt($("#counter").html());
+            i = i+1;
+           	$.ajax({
+            url: "http://localhost:8888/data",
+            type: 'POST',
+            data:'{"Count": '+i+'}',
+            dataType: 'json',
+            success: function(data) {
+                $("#counter").html(i);
+            },
+            error: function(request, error) {
+              console.log("Endpoint not working");
+            }
+          });
+	});
+        
+    	$("#btnReset").click(function(){  
+           	$.ajax({
+            url: "http://localhost:8888/data",
+            type: 'POST',
+            data:'{"Count": 0}',
+            dataType: 'json',
+            success: function(data) {
+                $("#counter").html(0);
+            },
+            error: function(request, error) {
+              console.log("Endpoint not working");
+            }
+          });
+	});
+});
+
+</script>
+</body>
+</html>
